@@ -1,4 +1,4 @@
-package com.citi.tts.apibrick.core.encryption;
+package com.citi.tts.apibrick.common.exception;
 
 /**
  * Exception thrown when encryption/decryption operations fail

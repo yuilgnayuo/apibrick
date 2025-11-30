@@ -1,8 +1,8 @@
 package com.citi.tts.apibrick.core.datasource.manager;
 
+import com.citi.tts.apibrick.common.enums.DataSourceType;
 import com.citi.tts.apibrick.core.datasource.DataSource;
 import com.citi.tts.apibrick.core.datasource.DataSourceFactory;
-import com.citi.tts.apibrick.core.datasource.DataSourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

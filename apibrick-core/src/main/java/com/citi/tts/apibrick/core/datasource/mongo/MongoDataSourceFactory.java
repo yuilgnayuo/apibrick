@@ -1,8 +1,8 @@
 package com.citi.tts.apibrick.core.datasource.mongo;
 
+import com.citi.tts.apibrick.common.enums.DataSourceType;
 import com.citi.tts.apibrick.core.datasource.DataSource;
 import com.citi.tts.apibrick.core.datasource.DataSourceFactory;
-import com.citi.tts.apibrick.core.datasource.DataSourceType;
 import reactor.core.publisher.Mono;
 import java.util.Map;
 

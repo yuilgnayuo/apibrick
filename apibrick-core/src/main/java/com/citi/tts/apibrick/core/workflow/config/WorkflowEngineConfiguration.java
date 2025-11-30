@@ -1,8 +1,7 @@
-package com.citi.tts.apibrick.core.workflow.engine;
+package com.citi.tts.apibrick.core.workflow.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import jakarta.annotation.PostConstruct;
 
 /**
  * Configuration for Workflow Engine

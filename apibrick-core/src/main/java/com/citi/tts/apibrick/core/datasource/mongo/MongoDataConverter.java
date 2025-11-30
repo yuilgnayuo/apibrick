@@ -1,7 +1,7 @@
 package com.citi.tts.apibrick.core.datasource.mongo;
 
+import com.citi.tts.apibrick.common.enums.DataSourceType;
 import com.citi.tts.apibrick.core.datasource.DataConverter;
-import com.citi.tts.apibrick.core.datasource.DataSourceType;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import java.util.HashMap;

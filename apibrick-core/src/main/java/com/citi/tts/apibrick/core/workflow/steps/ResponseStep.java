@@ -32,8 +32,7 @@ public class ResponseStep implements Step {
         long startTime = System.currentTimeMillis();
         
         // Get response template from step configuration
-        @SuppressWarnings("unchecked")
-        Map<String, Object> responseTemplate = (Map<String, Object>) context.get("responseTemplate");
+        Map<String, Object> responseTemplate = context.get("responseTemplate");
         
         // Generate response
         Map<String, Object> response = responseGenerator.generate(responseTemplate, context);

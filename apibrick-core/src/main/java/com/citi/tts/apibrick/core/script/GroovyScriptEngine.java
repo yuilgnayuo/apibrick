@@ -1,6 +1,7 @@
 package com.citi.tts.apibrick.core.script;
 
 
+import com.citi.tts.apibrick.common.exception.ScriptExecutionException;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import org.slf4j.Logger;

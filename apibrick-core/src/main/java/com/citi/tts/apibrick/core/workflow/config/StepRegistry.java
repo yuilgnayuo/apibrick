@@ -1,5 +1,6 @@
-package com.citi.tts.apibrick.core.workflow.engine;
+package com.citi.tts.apibrick.core.workflow.config;
 
+import com.citi.tts.apibrick.core.workflow.engine.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;

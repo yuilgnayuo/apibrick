@@ -1,0 +1,22 @@
+{
+  "flowCode": "flow_user_query_001",
+  "flowName": "User Query Flow",
+  "stepList": [
+    {
+      "stepId": "step_001",
+      "stepType": "PARAM_TRANSFORM",
+      "stepName": "Parameter Transformation",
+      "preStepIds": "",
+      "stepConfig": {"sourceParam": "userId", "targetParam": "user_id"},
+      "failStop": true
+    },
+    {
+      "stepId": "step_002",
+      "stepType": "GROOVY_SCRIPT",
+      "stepName": "Groovy Script Execution",
+      "preStepIds": "step_001",
+      "stepConfig": {"scriptContent": "def userId = params.get(\"user_id\"); return userId;"},
+      "failStop": true
+    }
+  ]
+}

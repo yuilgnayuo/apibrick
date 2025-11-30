@@ -1,4 +1,4 @@
-package com.citi.tts.apibrick.core.workflow.engine;
+package com.citi.tts.apibrick.common.enums;
 
 public enum FailureStrategy {
         TERMINATE,  // Stop workflow execution immediately

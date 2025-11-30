@@ -1,5 +1,7 @@
 package com.citi.tts.apibrick.core.workflow.engine;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,9 +14,13 @@ import java.util.Map;
  */
 public class StepContext {
     
+    @Getter
     private final String flowId;           // Flow definition ID
+    @Getter
     private final String flowInstanceId;   // Unique instance ID for this execution
+    @Getter
     private final String tenantId;         // Tenant ID for multi-tenancy isolation
+    @Getter
     private final String env;              // Environment (DEV/CTE)
     private final Map<String, Object> requestParams; // Original request parameters
     private final Map<String, Object> variables;     // Intermediate variables shared between steps
@@ -79,22 +85,5 @@ public class StepContext {
         return new HashMap<>(variables);
     }
     
-    // Getters
-    
-    public String getFlowId() {
-        return flowId;
-    }
-    
-    public String getFlowInstanceId() {
-        return flowInstanceId;
-    }
-    
-    public String getTenantId() {
-        return tenantId;
-    }
-    
-    public String getEnv() {
-        return env;
-    }
 }
 

@@ -1,0 +1,25 @@
+spring:
+  # 数据库连接配置（以 MySQL 为例）
+  datasource:
+    url: jdbc:mysql://localhost:3306/apibrick?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root # 你的 MySQL 用户名
+    password: 123456 # 你的 MySQL 密码
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 8.x 驱动类
+
+  # JPA / Hibernate 核心配置
+  jpa:
+    # 数据库方言（匹配 MySQL 版本，Hibernate 自动生成适配的 SQL）
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    # 显示执行的 SQL（开发环境开启，生产环境关闭）
+    show-sql: true
+    # 格式化 SQL（便于阅读）
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true # 显示 SQL 注释
+    # 自动建表策略（开发环境用 update，生产环境用 none）
+    hibernate:
+      ddl-auto: update
+    # 实体扫描包（可选，Spring Boot 会自动扫描主类下的所有 @Entity）
+    scan:
+      packages: com.apibrick.core.model

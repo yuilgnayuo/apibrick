@@ -1,4 +1,4 @@
-package com.citi.tts.apibrick.core.script;
+package com.citi.tts.apibrick.common.exception;
 
 /**
  * Exception thrown when script execution fails

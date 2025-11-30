@@ -1,5 +1,7 @@
 package com.citi.tts.apibrick.core.workflow.engine;
 
+import com.citi.tts.apibrick.common.enums.FailureStrategy;
+
 import java.util.Map;
 
 /**
@@ -86,10 +88,5 @@ public class StepDefinition {
     public void setRetryInterval(long retryInterval) {
         this.retryInterval = retryInterval;
     }
-    
-    /**
-     * Failure handling strategy
-     */
-
 }
 

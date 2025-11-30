@@ -14,6 +14,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // spring jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // 数据库驱动：MySQL 8.x（根据实际数据库替换，如 H2、PostgreSQL）
+    implementation 'com.mysql:mysql-connector-j:8.0.33'
+
     
     // R2DBC for Oracle (if needed)
     implementation 'io.r2dbc:r2dbc-pool:1.0.1.RELEASE'

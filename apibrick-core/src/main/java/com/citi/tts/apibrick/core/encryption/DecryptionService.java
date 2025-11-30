@@ -1,5 +1,6 @@
 package com.citi.tts.apibrick.core.encryption;
 
+import com.citi.tts.apibrick.common.exception.EncryptionException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

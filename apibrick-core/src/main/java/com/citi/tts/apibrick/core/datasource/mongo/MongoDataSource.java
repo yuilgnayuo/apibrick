@@ -1,7 +1,7 @@
 package com.citi.tts.apibrick.core.datasource.mongo;
 
+import com.citi.tts.apibrick.common.enums.DataSourceType;
 import com.citi.tts.apibrick.core.datasource.DataSource;
-import com.citi.tts.apibrick.core.datasource.DataSourceType;
 import com.citi.tts.apibrick.core.datasource.DataConverter;
 import com.citi.tts.apibrick.core.datasource.QueryParser;
 import com.mongodb.ConnectionString;
