@@ -1,1 +1,3 @@
 rootProject.name = 'apibrick'
+include 'apibrick-core'
+include 'apibrick-web'

@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: apibrick-web
+  
+  # WebFlux configuration
+  webflux:
+    base-path: /api/v1
+
+# Server configuration
+server:
+  port: 8080
+
+# Management endpoints for monitoring
+# Temporarily disabled due to Spring Boot 4.0.0 compatibility issues
+# management:
+#   endpoints:
+#     web:
+#       exposure:
+#         include: health,info,metrics,prometheus
+#   metrics:
+#     export:
+#       prometheus:
+#         enabled: true
+#   endpoint:
+#     health:
+#       show-details: always
+
+# Logging configuration
+logging:
+  level:
+    com.citi.tts.apibrick: INFO
+    org.springframework: WARN
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# OpenAPI/Swagger configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
