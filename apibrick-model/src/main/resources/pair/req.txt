@@ -1,0 +1,8 @@
+POST http/1.1 /api/v1/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@gmail.com",
+    "password": "securepassword123"
+ }

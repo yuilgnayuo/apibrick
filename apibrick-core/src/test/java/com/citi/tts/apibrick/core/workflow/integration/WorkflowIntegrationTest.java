@@ -1,8 +1,7 @@
 package com.citi.tts.apibrick.core.workflow.integration;
 
 import com.citi.tts.apibrick.core.datasource.DataSource;
-import com.citi.tts.apibrick.core.datasource.DataSourceManager;
-import com.citi.tts.apibrick.core.datasource.DataSourceType;
+import com.citi.tts.apibrick.core.datasource.manager.DataSourceManager;
 import com.citi.tts.apibrick.core.response.ResponseGenerator;
 import com.citi.tts.apibrick.core.workflow.engine.*;
 import com.citi.tts.apibrick.core.workflow.steps.DataSourceQueryStep;

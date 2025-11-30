@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Project modules
+    implementation project(':apibrick-common')
+    implementation project(':apibrick-model')
+    implementation project(':apibrick-core')
+    
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    
+    // R2DBC for Oracle (if needed)
+    implementation 'io.r2dbc:r2dbc-pool:1.0.1.RELEASE'
+    
+    // Monitoring
+    implementation 'io.micrometer:micrometer-core'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+}
+

@@ -1,0 +1,632 @@
+openapi: 3.0.3
+info:
+  title: Apibrick Low-Code API Platform - API Management Interfaces
+  description: Core API management interfaces for the low-code API platform, including creation, query, update, deletion operations, and support for multi-tenancy, encryption/decryption configuration, and Groovy script engine configuration.
+  version: 1.0.0
+  contact:
+    name: Apibrick Development Team
+    email: dev@apibrick.com
+servers:
+  - url: https://api.apibrick.com/v1
+    description: Production Environment
+  - url: http://localhost:8080/v1
+    description: Local Development Environment
+tags:
+  - name: api-manage
+    description: API Management Related Interfaces
+paths:
+  # 1. API List Pagination Query (GET, with query, pagination, multi-tenant parameters)
+  /apis:
+    get:
+      tags:
+        - api-manage
+      summary: Query API List by Pagination
+      description: Support pagination query by API name, status, and tenant ID, return paginated data
+      operationId: listApis
+      parameters:
+        - name: tenantId
+          in: query
+          description: Tenant ID (Multi-tenancy isolation)
+          required: true
+          schema:
+            type: string
+            example: "tenant_001"
+        - name: apiName
+          in: query
+          description: Fuzzy query by API name
+          required: false
+          schema:
+            type: string
+            example: "User Info"
+        - name: apiStatus
+          in: query
+          description: API status (ENABLE-Enabled, DISABLE-Disabled, DRAFT-Draft)
+          required: false
+          schema:
+            type: string
+            enum: [ENABLE, DISABLE, DRAFT]
+            example: "ENABLE"
+        - name: page
+          in: query
+          description: Page number (starts from 1)
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - name: size
+          in: query
+          description: Number of records per page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 10
+      responses:
+        '200': # Success Response (Paginated Data)
+          description: Pagination query successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPageResponse'
+              examples:
+                success:
+                  summary: Normal paginated data response
+                  value:
+                    code: 200
+                    msg: "Query successful"
+                    data:
+                      total: 100
+                      pages: 10
+                      current: 1
+                      size: 10
+                      records:
+                        - apiId: "api_001"
+                          apiName: "User Info Query API"
+                          apiPath: "/api/v1/user/{userId}"
+                          method: "GET"
+                          tenantId: "tenant_001"
+                          encrypt: true
+                          groovyScript: "def userId = params.get(\"userId\"); return userId;"
+                          status: "ENABLE"
+                          createTime: "2025-11-30 10:00:00"
+        '400': # Error Response (Invalid Parameters)
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                paramError:
+                  summary: Pagination parameter error
+                  value:
+                    code: 40001
+                    msg: "The page number must be greater than or equal to 1"
+                    detail: "The page parameter value is 0, which does not comply with the rules"
+        '401': # Error Response (Unauthorized)
+          description: Not logged in or token expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                unAuth:
+                  summary: Token expired
+                  value:
+                    code: 40101
+                    msg: "Login has expired, please log in again"
+                    detail: "Token parsing failed, invalid signature"
+        '403': # Error Response (Forbidden)
+          description: Tenant has no access permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbidden:
+                  summary: Insufficient tenant permissions
+                  value:
+                    code: 40301
+                    msg: "The current tenant has no permission to query the API list"
+                    detail: "tenant_001 is not assigned the API_READ permission"
+    post:
+      tags:
+        - api-manage
+      summary: Create a New API
+      description: Create a new low-code API, support configuration of encryption/decryption, multi-data sources, Groovy scripts, request/response rules
+      operationId: createApi
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCreateRequest'
+            examples:
+              createExample:
+                summary: Create API example
+                value:
+                  apiName: "Order Creation API"
+                  apiPath: "/api/v1/order"
+                  method: "POST"
+                  tenantId: "tenant_001"
+                  encrypt: true
+                  encryptAlgorithm: "AES"
+                  dataSourceIds: ["ds_mysql_001", "ds_redis_001"]
+                  groovyScript: "def orderNo = UUID.randomUUID().toString(); return orderNo;"
+                  requestConfig:
+                    contentType: "application/json"
+                    params:
+                      - name: "orderName"
+                        type: "string"
+                        required: true
+                  responseConfig:
+                    contentType: "application/json"
+                    successCode: 200
+                    failCode: 500
+                  status: "DRAFT"
+      responses:
+        '201': # Success Response (Created)
+          description: API created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCreateResponse'
+        '400': # Error Response (Invalid Request Body)
+          description: Invalid creation parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                createParamError:
+                  summary: Request body parameter error
+                  value:
+                    code: 40002
+                    msg: "Invalid API path format"
+                    detail: "The apiPath must start with /, the current value is api/v1/order"
+
+  # 2. Single API Detail Query (GET, with path parameter)
+  /apis/{apiId}:
+    get:
+      tags:
+        - api-manage
+      summary: Query API Detail by API ID
+      description: Query the complete configuration information of the specified API, including encryption/decryption, data source, script engine configuration, etc.
+      operationId: getApiDetail
+      parameters:
+        - name: apiId
+          in: path
+          description: Unique API identifier
+          required: true
+          schema:
+            type: string
+            example: "api_001"
+        - name: tenantId
+          in: query
+          description: Tenant ID (Multi-tenancy isolation)
+          required: true
+          schema:
+            type: string
+            example: "tenant_001"
+      responses:
+        '200': # Success Response (Single Data)
+          description: Query successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiDetailResponse'
+        '404': # Error Response (Resource Not Found)
+          description: API does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  summary: API not found
+                  value:
+                    code: 40401
+                    msg: "API does not exist"
+                    detail: "The resource with apiId api_999 was not found"
+    delete:
+      tags:
+        - api-manage
+      summary: Delete API
+      description: Logically delete the specified API (Multi-tenancy isolation)
+      operationId: deleteApi
+      parameters:
+        - name: apiId
+          in: path
+          description: Unique API identifier
+          required: true
+          schema:
+            type: string
+            example: "api_001"
+        - name: tenantId
+          in: query
+          description: Tenant ID
+          required: true
+          schema:
+            type: string
+            example: "tenant_001"
+      responses:
+        '200': # Success Response (Deleted)
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '500': # Error Response (Internal Server Error)
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                serverError:
+                  summary: Database operation failed
+                  value:
+                    code: 50001
+                    msg: "Failed to delete API"
+                    detail: "Database connection timeout, unable to execute deletion operation"
+
+  # 3. Update API Status (PUT, mixed parameters: path + request body)
+  /apis/{apiId}/status:
+    put:
+      tags:
+        - api-manage
+      summary: Update API Status
+      description: Switch between enabled/disabled/draft status
+      operationId: updateApiStatus
+      parameters:
+        - name: apiId
+          in: path
+          description: Unique API identifier
+          required: true
+          schema:
+            type: string
+            example: "api_001"
+        - name: tenantId
+          in: query
+          description: Tenant ID
+          required: true
+          schema:
+            type: string
+            example: "tenant_001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  description: API status
+                  enum: [ENABLE, DISABLE, DRAFT]
+                  example: "DISABLE"
+              required: [status]
+      responses:
+        '200': # Success Response (Updated)
+          description: Status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+              examples:
+                updateSuccess:
+                  summary: Status update successful
+                  value:
+                    code: 200
+                    msg: "API status updated to disabled"
+                    data: null
+        '404': # Error Response (Resource Not Found)
+          description: API does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+# Public Components: Reusable request bodies, responses, and data models
+components:
+  schemas:
+    # Basic Response Model (Parent of all responses)
+    BaseResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Response code (200 for success, others for errors)
+          example: 200
+        msg:
+          type: string
+          description: Response message
+          example: "Operation successful"
+        data:
+          type: object
+          description: Response data (can be null)
+      required: [code, msg]
+
+    # Pagination Query Response Model
+    ApiPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  description: Total number of records
+                  example: 100
+                pages:
+                  type: integer
+                  description: Total number of pages
+                  example: 10
+                current:
+                  type: integer
+                  description: Current page number
+                  example: 1
+                size:
+                  type: integer
+                  description: Number of records per page
+                  example: 10
+                records:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ApiSimpleVO'
+              required: [total, pages, current, size, records]
+
+    # API Simple Info VO (List Display)
+    ApiSimpleVO:
+      type: object
+      properties:
+        apiId:
+          type: string
+          description: Unique API identifier
+          example: "api_001"
+        apiName:
+          type: string
+          description: API name
+          example: "User Info Query API"
+        apiPath:
+          type: string
+          description: API request path
+          example: "/api/v1/user/{userId}"
+        method:
+          type: string
+          description: HTTP request method
+          enum: [GET, POST, PUT, DELETE, PATCH]
+          example: "GET"
+        tenantId:
+          type: string
+          description: Tenant ID
+          example: "tenant_001"
+        encrypt:
+          type: boolean
+          description: Whether to enable encryption/decryption
+          example: true
+        groovyScript:
+          type: string
+          description: Groovy script content
+          example: "def userId = params.get(\"userId\"); return userId;"
+        status:
+          type: string
+          description: API status
+          enum: [ENABLE, DISABLE, DRAFT]
+          example: "ENABLE"
+        createTime:
+          type: string
+          format: date-time
+          description: Creation time
+          example: "2025-11-30 10:00:00"
+      required: [apiId, apiName, apiPath, method, tenantId, status]
+
+    # API Detail Response Model
+    ApiDetailResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/ApiDetailVO'
+
+    # API Detail VO (Contains complete configuration)
+    ApiDetailVO:
+      type: object
+      properties:
+        apiId:
+          type: string
+          example: "api_001"
+        apiName:
+          type: string
+          example: "User Info Query API"
+        apiPath:
+          type: string
+          example: "/api/v1/user/{userId}"
+        method:
+          type: string
+          enum: [GET, POST, PUT, DELETE, PATCH]
+          example: "GET"
+        tenantId:
+          type: string
+          example: "tenant_001"
+        encrypt:
+          type: boolean
+          example: true
+        encryptAlgorithm:
+          type: string
+          description: Encryption algorithm (AES/RSA)
+          example: "AES"
+        dataSourceIds:
+          type: array
+          description: Associated data source ID list
+          items:
+            type: string
+          example: ["ds_mysql_001", "ds_redis_001"]
+        groovyScript:
+          type: string
+          example: "def userId = params.get(\"userId\"); return userId;"
+        requestConfig:
+          type: object
+          description: Request configuration
+          properties:
+            contentType:
+              type: string
+              example: "application/json"
+            params:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "userId"
+                  type:
+                    type: string
+                    example: "string"
+                  required:
+                    type: boolean
+                    example: true
+        responseConfig:
+          type: object
+          description: Response configuration
+          properties:
+            contentType:
+              type: string
+              example: "application/json"
+            successCode:
+              type: integer
+              example: 200
+            failCode:
+              type: integer
+              example: 500
+        status:
+          type: string
+          example: "ENABLE"
+        createTime:
+          type: string
+          format: date-time
+          description: Creation time
+          example: "2025-11-30 10:00:00"
+        updateTime:
+          type: string
+          format: date-time
+          description: Update time
+          example: "2025-11-30 11:00:00"
+      required: [apiId, apiName, apiPath, method, tenantId, status]
+
+    # Create API Request Body
+    ApiCreateRequest:
+      type: object
+      properties:
+        apiName:
+          type: string
+          description: API name
+          example: "Order Creation API"
+        apiPath:
+          type: string
+          description: API request path (must start with /)
+          example: "/api/v1/order"
+        method:
+          type: string
+          description: HTTP request method
+          enum: [GET, POST, PUT, DELETE, PATCH]
+          example: "POST"
+        tenantId:
+          type: string
+          description: Tenant ID
+          example: "tenant_001"
+        encrypt:
+          type: boolean
+          description: Whether to enable encryption/decryption
+          example: true
+        encryptAlgorithm:
+          type: string
+          description: Encryption algorithm (AES/RSA)
+          example: "AES"
+        dataSourceIds:
+          type: array
+          description: Associated data source ID list
+          items:
+            type: string
+          example: ["ds_mysql_001", "ds_redis_001"]
+        groovyScript:
+          type: string
+          description: Groovy script content
+          example: "def orderNo = UUID.randomUUID().toString(); return orderNo;"
+        requestConfig:
+          type: object
+          description: Request configuration
+          properties:
+            contentType:
+              type: string
+              example: "application/json"
+            params:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "orderName"
+                  type:
+                    type: string
+                    example: "string"
+                  required:
+                    type: boolean
+                    example: true
+        responseConfig:
+          type: object
+          description: Response configuration
+          properties:
+            contentType:
+              type: string
+              example: "application/json"
+            successCode:
+              type: integer
+              example: 200
+            failCode:
+              type: integer
+              example: 500
+        status:
+          type: string
+          description: API status
+          enum: [ENABLE, DISABLE, DRAFT]
+          example: "DRAFT"
+      required: [apiName, apiPath, method, tenantId, status]
+
+    # Create API Response Model
+    ApiCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                apiId:
+                  type: string
+                  description: Unique identifier of the newly created API
+                  example: "api_002"
+              required: [apiId]
+
+    # Error Response Model
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code (customized, e.g., 40001 = invalid parameters)
+          example: 40001
+        msg:
+          type: string
+          description: Error prompt message
+          example: "Invalid request parameters"
+        detail:
+          type: string
+          description: Error detail (optional, for debugging)
+          example: "The page parameter value is 0, which does not comply with the rules"
+      required: [code, msg]

@@ -1,6 +1,6 @@
 package com.citi.tts.apibrick.core.workflow.steps;
 
-import com.citi.tts.apibrick.core.datasource.DataSourceManager;
+import com.citi.tts.apibrick.core.datasource.manager.DataSourceManager;
 import com.citi.tts.apibrick.core.datasource.DataSourceType;
 import com.citi.tts.apibrick.core.workflow.engine.Step;
 import com.citi.tts.apibrick.core.workflow.engine.StepContext;

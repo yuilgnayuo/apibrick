@@ -2,6 +2,8 @@ package com.citi.tts.apibrick.core.response;
 
 import com.citi.tts.apibrick.core.workflow.engine.StepContext;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for ResponseGenerator
  * Tests dynamic response generation based on templates and context
  */
+
+@DisplayName("response generator tests")
 class ResponseGeneratorTest {
     
     private ResponseGenerator responseGenerator;
