@@ -57,6 +57,12 @@ public class ApiDefinition {
     private String apiPath;
 
     /**
+     * API request fixed (path parsed from Swagger, e.g., /api/v1/user/)
+     */
+    @Column(name = "api_fix", nullable = false)
+    private String apiFix;
+
+    /**
      * HTTP request method (method parsed from Swagger, e.g., GET/POST/PUT/DELETE)
      */
     @Column(name = "http_method", nullable = false)

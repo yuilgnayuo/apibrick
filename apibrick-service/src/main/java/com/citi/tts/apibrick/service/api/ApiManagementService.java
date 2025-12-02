@@ -6,7 +6,6 @@ import com.citi.tts.apibrick.core.workflow.engine.StepContext;
 import com.citi.tts.apibrick.core.workflow.engine.WorkflowResult;
 import com.citi.tts.apibrick.model.api.APIEndpoint;
 import com.citi.tts.apibrick.model.swagger.SwaggerParserService;
-import com.citi.tts.apibrick.service.monitoring.MonitoringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,13 @@ public class ApiManagementService {
     
     private static final Logger logger = LoggerFactory.getLogger(ApiManagementService.class);
     
-    @Autowired
     private SwaggerParserService swaggerParserService;
     
     @Autowired
     private PipelineEngine pipelineEngine;
     
-    @Autowired
-    private MonitoringService monitoringService;
+//    @Autowired
+//    private MonitoringService monitoringService;
     
     /**
      * Import APIs from Swagger/OpenAPI specification
@@ -77,13 +75,13 @@ public class ApiManagementService {
         return pipelineEngine.execute(flowId, flowDefinition, context)
             .doOnSuccess(result -> {
                 long executeTime = System.currentTimeMillis() - startTime;
-                monitoringService.recordWorkflowExecution(flowId, tenantId, result.isSuccess(), executeTime);
+//                monitoringService.recordWorkflowExecution(flowId, tenantId, result.isSuccess(), executeTime);
                 logger.info("Workflow executed. flowId={}, success={}, time={}ms",
                            flowId, result.isSuccess(), executeTime);
             })
             .doOnError(error -> {
                 long executeTime = System.currentTimeMillis() - startTime;
-                monitoringService.recordWorkflowExecution(flowId, tenantId, false, executeTime);
+//                monitoringService.recordWorkflowExecution(flowId, tenantId, false, executeTime);
                 logger.error("Workflow execution error. flowId={}", flowId, error);
             });
     }

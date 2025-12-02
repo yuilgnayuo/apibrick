@@ -38,7 +38,7 @@ public class TenantInterceptor implements WebFilter {
             logger.warn("Tenant ID not found in request. Path: {}", request.getPath());
             // In production, you might want to return an error here
             // For now, we'll use a default tenant ID
-            tenantId = "default-tenant";
+            tenantId = "tenant_001";
         }
         
         logger.debug("Request tenantId={}, env={}, path={}", tenantId, env, request.getPath());

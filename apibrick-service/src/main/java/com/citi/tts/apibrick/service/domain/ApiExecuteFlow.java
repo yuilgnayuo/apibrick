@@ -52,7 +52,7 @@ public class ApiExecuteFlow {
      */
     @Column(name = "step_list", columnDefinition = "TEXT")
     @Convert(converter = JsonStringConverter.class)
-    private List<Step> stepList;
+    private List<ApiStep> stepList;
 
     /**
      * Flow description

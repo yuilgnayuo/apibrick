@@ -16,6 +16,8 @@ public interface ApiDefinitionRepository extends JpaRepository<ApiDefinition, Lo
      */
     Optional<ApiDefinition> findByTenantIdAndApiPath(String tenantId, String apiPath);
 
+    Optional<ApiDefinition> findByTenantIdAndApiFix(String tenantId, String apiFix);
+
     /**
      * Query by unique API identifier
      */
