@@ -5,6 +5,22 @@ spring:
   # WebFlux configuration
   webflux:
     base-path: /api/v1
+  
+  # MySQL数据库连接配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/apibrick?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # JPA / Hibernate 配置
+  # 注意：实体扫描和JPA配置现在在 JpaConfig 类中显式配置
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
 
 # Server configuration
 server:

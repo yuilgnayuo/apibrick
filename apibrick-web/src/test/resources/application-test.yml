@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: apibrick-web-test
+  
+  # MySQL数据库连接配置（测试环境）
+  datasource:
+    url: jdbc:mysql://localhost:3306/apibrick?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  # JPA / Hibernate 配置（测试环境）
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: validate  # 测试环境使用validate，不自动创建表
+
+# Logging configuration for tests
+logging:
+  level:
+    com.citi.tts.apibrick: DEBUG
+    org.springframework.jdbc: DEBUG
+    org.hibernate: INFO
+
