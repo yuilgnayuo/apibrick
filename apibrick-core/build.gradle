@@ -4,6 +4,10 @@ plugins {
 
 
 dependencies {
+
+    implementation project(':apibrick-common')
+    implementation project(':apibrick-model')
+
     // Spring Framework Core (for dependency injection and configuration)
     implementation 'org.springframework:spring-core'
     implementation 'org.springframework:spring-context'
@@ -15,13 +19,10 @@ dependencies {
     implementation 'io.projectreactor:reactor-core'
 
     // Reactive database drivers (R2DBC)
-// https://mvnrepository.com/artifact/io.r2dbc/r2dbc-pool
     implementation("io.r2dbc:r2dbc-pool:1.0.2.RELEASE")
-// https://mvnrepository.com/artifact/com.oracle.database.r2dbc/oracle-r2dbc
     implementation("com.oracle.database.r2dbc:oracle-r2dbc:1.3.0")
 //    implementation 'io.r2dbc:r2dbc-mysql:0.9.2.RELEASE'
     implementation 'io.asyncer:r2dbc-mysql:1.4.0'
-    // https://mvnrepository.com/artifact/org.postgresql/r2dbc-postgresql
     implementation("org.postgresql:r2dbc-postgresql:1.1.1.RELEASE")
 
     // MongoDB Reactive
