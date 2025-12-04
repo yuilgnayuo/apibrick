@@ -1,5 +1,6 @@
 package com.citi.tts.apibrick.core.workflow.engine;
 
+import com.citi.tts.apibrick.common.enums.FailureStrategy;
 import com.citi.tts.apibrick.core.workflow.config.StepRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

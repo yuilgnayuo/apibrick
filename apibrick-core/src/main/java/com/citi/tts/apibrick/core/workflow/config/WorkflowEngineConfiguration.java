@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WorkflowEngineConfiguration {
     
-    @Bean
-    public StepRegistry stepRegistry() {
-        StepRegistry registry = new StepRegistry();
-        registry.initialize();
-        return registry;
-    }
+//    @Bean
+//    public StepRegistry stepRegistry() {
+//        StepRegistry registry = new StepRegistry();
+//        registry.initialize();
+//        return registry;
+//    }
 }
 
