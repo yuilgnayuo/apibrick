@@ -40,10 +40,11 @@ class WorkflowIntegrationTest {
     
     @Mock
     private DataSource mockDataSource;
-    
+    @Mock
+    private StepRegistry stepRegistry;
     @BeforeEach
     void setUp() {
-        stepRegistry = new StepRegistry();
+
         responseGenerator = new ResponseGenerator();
         
         // Register real steps

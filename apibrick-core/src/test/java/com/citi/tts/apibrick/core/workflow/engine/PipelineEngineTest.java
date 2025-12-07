@@ -33,9 +33,10 @@ class PipelineEngineTest {
     @Mock
     private Step mockResponseStep;
 
+    @Mock
+    StepRegistry stepRegistry;
     @BeforeEach
     void setUp() {
-        stepRegistry = new StepRegistry();
 
         // Register mock steps
         when(mockDataSourceStep.getType()).thenReturn("DATASOURCE_QUERY");
