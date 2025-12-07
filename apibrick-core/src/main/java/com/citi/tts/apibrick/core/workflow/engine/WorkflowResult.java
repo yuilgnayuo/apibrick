@@ -81,5 +81,9 @@ public class WorkflowResult {
     public void setFlowInstanceId(String flowInstanceId) {
         this.flowInstanceId = flowInstanceId;
     }
+
+    public int getStatusCode() {
+        return 200;
+    }
 }
 
