@@ -1,2 +1,3 @@
-com.citi.tts.apibrick.core.datasource.mongo.MongoDataSourceFactory
+##com.citi.tts.apibrick.core.datasource.mongo.MongoDataSourceFactory
+com.citi.tts.apibrick.core.datasource.mysql.MySqlDataSourceFactory
 
