@@ -1,0 +1,87 @@
+[
+  {
+    "stepId": "step_001",
+    "stepName": "Path Parameter Validation & Transformation",
+    "stepType": "PARAM_TRANSFORM",
+    "preStepIds": "",
+    "failStop": true,
+    "stepConfig": {
+      "sourceParam": "id",
+      "targetParam": "userId",
+      "paramType": "PATH",
+      "dataType": "INTEGER",
+      "validationRules": {
+        "required": true,
+        "min": 1,
+        "max": 999999,
+        "errorMsg": "Invalid user ID (must be 1-999999)"
+      }
+    }
+  },
+  {
+    "stepId": "step_002",
+    "stepName": "Groovy Script - User ID Validation",
+    "stepType": "GROOVY_SCRIPT",
+    "preStepIds": "step_001",
+    "failStop": true,
+    "stepConfig": {
+      "scriptCode": "def userId = params.get(\"userId\"); \nif (userId == null || userId < 0) {\n    throw new IllegalArgumentException(\"User ID is invalid\");\n} \nreturn userId;",
+      "scriptTimeout": 3000,
+      "sandboxEnabled": true
+    }
+  },
+  {
+    "stepId": "step_003",
+    "stepName": "MySQL - Query User By ID",
+    "stepType": "DATASOURCE_QUERY",
+    "preStepIds": "step_002",
+    "failStop": true,
+    "stepConfig": {
+      "dsType": "MYSQL",
+      "dsId": "ds_mysql_001",
+      "queryConfig": {
+        "sql": "SELECT id, username, email, create_time AS createTime FROM user WHERE id = ?",
+        "fieldMapping": {
+          "userId": "id",
+          "username": "username",
+          "email": "email",
+          "createTime": "createTime"
+        },
+        "parameters": [
+          1
+        ],
+        "resultType": "MAP",
+        "emptyResultMsg": "User not found with ID: ${userId}"
+      }
+    }
+  },
+  {
+    "stepId": "step_004",
+    "stepName": "Standard Response Assembly",
+    "stepType": "RESPONSE",
+    "preStepIds": "step_003",
+    "failStop": true,
+    "stepConfig": {
+      "responseTemplate": {
+        "code": {
+          "sourceType": "expression",
+          "sourceValue": "${#steps?.['step_003']?.['data'] != null ? 200 : 404}"
+        },
+        "message": {
+          "sourceType": "expression",
+          "sourceValue": "${#steps?.['step_003']?.['data'] != null ? 'success' : 'client not found'}"
+        },
+        "apiVersion": {
+          "sourceType": "fixed",
+          "sourceValue": "API_BRICK_V1"
+        },
+        "tenantId": "${#tenantId}",
+        "env": "${#env}",
+        "timestamp": "${#variables.timestamp}",
+        "userId": "${#steps?.['step_003']?.['data']?.[userId]}",
+        "email": "${#steps?.['step_003']?.['data']?.[email]}",
+        "username": "${#steps?.['step_003']?.['data']?.[username]}"
+      }
+    }
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "200": {
+    "code": 200,
+    "msg": "Query success",
+    "dataStructure": null
+  },
+  "404": {
+    "code": 404,
+    "msg": "User not found",
+    "dataStructure": null
+  },
+  "400": {
+    "code": 400,
+    "msg": "Invalid parameter (id must be positive integer)",
+    "dataStructure": null
+  },
+  "500": {
+    "code": 500,
+    "msg": "Custom Internal server error",
+    "dataStructure": null
+  }
+}

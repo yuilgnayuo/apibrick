@@ -6,6 +6,7 @@ import com.citi.tts.apibrick.core.datasource.DataConverter;
 import com.citi.tts.apibrick.core.datasource.QueryParser;
 import io.asyncer.r2dbc.mysql.MySqlConnectionConfiguration;
 import io.asyncer.r2dbc.mysql.MySqlConnectionFactory;
+import io.asyncer.r2dbc.mysql.constant.SslMode;
 import io.r2dbc.pool.ConnectionPool;
 import io.r2dbc.pool.ConnectionPoolConfiguration;
 import io.r2dbc.spi.ConnectionFactory;
@@ -65,7 +66,7 @@ public class MySqlDataSource implements DataSource {
             String host = (String) config.get("host");
             String portStr = String.valueOf(config.getOrDefault("port", 3306));
             int port = Integer.parseInt(portStr);
-            String database = (String) config.get("database");
+            String database = (String) config.get("dbName");
             String username = (String) config.get("username");
             String password = (String) config.get("password");
 
@@ -81,19 +82,22 @@ public class MySqlDataSource implements DataSource {
                     .database(database)
                     .username(username)
                     .password(password)
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .sslMode(SslMode.DISABLED)
                     .build();
-
             // Create connection factory
             ConnectionFactory connectionFactory = MySqlConnectionFactory.from(connectionConfig);
 
             // Create connection pool configuration
             ConnectionPoolConfiguration poolConfig = ConnectionPoolConfiguration.builder(connectionFactory)
-                    .maxIdleTime(Duration.ofMinutes(30))
-                    .initialSize(2)
-                    .maxSize(10)
-                    .maxCreateConnectionTime(Duration.ofSeconds(30))
-                    .maxAcquireTime(Duration.ofSeconds(30))
+                    .maxIdleTime(Duration.ofMinutes(5))
+                    .initialSize(1)
+                    .maxSize(5)
+                    .maxCreateConnectionTime(Duration.ofSeconds(10))
+                    .maxAcquireTime(Duration.ofSeconds(8))
                     .maxLifeTime(Duration.ofHours(1))
+                    .validationQuery("SELECT 1")
+                    .acquireRetry(1)
                     .build();
 
             // Create connection pool
