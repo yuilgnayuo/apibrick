@@ -165,8 +165,8 @@ public class ResponseGenerator {
                 
             case "expression":
                 // Evaluate EL expression
-                if (sourceValue instanceof String) {
-                    value = evaluateExpression((String) sourceValue, context);
+                if (sourceValue instanceof String stringValue) {
+                    value = evaluateExpression(stringValue.substring(2, stringValue.length() - 1), context);
                 }
                 break;
                 
@@ -226,6 +226,9 @@ public class ResponseGenerator {
      */
     private Object evaluateExpression(String expression, StepContext context) {
         try {
+            if (expression.startsWith("${") && expression.endsWith("}")) {
+                expression =  (expression.substring(2, expression.length() - 1));
+            }
             StandardEvaluationContext evalContext = new StandardEvaluationContext();
             
             // Add request parameters to context
@@ -249,7 +252,8 @@ public class ResponseGenerator {
                 }
             }
             evalContext.setVariable("steps", stepOutputs);
-            
+            logger.info("Evaluating expression: {} with context variables: {}", expression,
+                    evalContext.lookupVariable(""));
             // Parse and evaluate expression
             Expression expr = expressionParser.parseExpression(expression);
             return expr.getValue(evalContext);

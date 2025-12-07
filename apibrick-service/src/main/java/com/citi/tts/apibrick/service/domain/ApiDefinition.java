@@ -100,7 +100,7 @@ public class ApiDefinition {
      */
     @Column(name = "response_def", columnDefinition = "TEXT")
     @Convert(converter = JsonStringConverter.class)
-    private Map<Integer, Map<String, Object>> responseDef;
+    private Map<String, Map<String, Object>> responseDef;
 
     /**
      * Associated orchestration flow ID (associates with flowCode of ApiExecuteFlow)

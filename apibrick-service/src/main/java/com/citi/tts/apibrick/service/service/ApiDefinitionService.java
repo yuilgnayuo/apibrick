@@ -25,7 +25,7 @@ public class ApiDefinitionService {
     public ApiDefinition saveFromSwagger(String tenantId, String apiCode, String apiName,
                                          String apiPath, String httpMethod,
                                          List<Map<String, Object>> requestParams,
-                                         Map<Integer, Map<String, Object>> responseDef) {
+                                         Map<String, Map<String, Object>> responseDef) {
         ApiDefinition apiDefinition = new ApiDefinition();
         apiDefinition.setTenantId(tenantId);
         apiDefinition.setApiCode(apiCode);
